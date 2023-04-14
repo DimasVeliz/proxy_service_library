@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b981bd5-c047-41b2-adb0-0d5088dff99f" name="Changes" comment="isBinary bug fixed, it was always false">
+    <list default="true" id="0b981bd5-c047-41b2-adb0-0d5088dff99f" name="Changes" comment="proxy-service now suports execution of httpcalls given the info provided manually and not extracted form httpRequest">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Dto/ProtoRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/boosting/code/Services/Impl/ProxyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Services/Impl/ProxyServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681484699599</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="proxy-service now suports execution of httpcalls given the info provided manually and not extracted form httpRequest">
+      <created>1681486054577</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1681486054577</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -154,6 +163,7 @@
     <MESSAGE value="adjusting constants" />
     <MESSAGE value="removing Gateway prefix if necessary" />
     <MESSAGE value="isBinary bug fixed, it was always false" />
-    <option name="LAST_COMMIT_MESSAGE" value="isBinary bug fixed, it was always false" />
+    <MESSAGE value="proxy-service now suports execution of httpcalls given the info provided manually and not extracted form httpRequest" />
+    <option name="LAST_COMMIT_MESSAGE" value="proxy-service now suports execution of httpcalls given the info provided manually and not extracted form httpRequest" />
   </component>
 </project>
