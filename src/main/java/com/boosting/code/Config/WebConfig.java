@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebConfig {
     public WebClient getBinaryClient(String base) {
         WebClient client = WebClient.builder()
-                .baseUrl(StringUtils.hasText(base)?base: Constants.OBJECT_STORE_HOST)
+                .baseUrl(StringUtils.hasText(base)?base: Constants.LOCAL_HOST)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
                 .codecs(codecs -> codecs
                         .defaultCodecs()
@@ -23,7 +23,7 @@ public class WebConfig {
 
     public WebClient getJSONClient(String base) {
         WebClient client = WebClient.builder()
-                .baseUrl(StringUtils.hasText(base)?base:Constants.OBJECT_STORE_HOST)
+                .baseUrl(StringUtils.hasText(base)?base:Constants.LOCAL_HOST)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .codecs(codecs -> codecs
                         .defaultCodecs()
