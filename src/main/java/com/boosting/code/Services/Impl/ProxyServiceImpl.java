@@ -30,11 +30,15 @@ import java.util.concurrent.atomic.AtomicReference;
 @AllArgsConstructor
 public class ProxyServiceImpl implements IProxyService {
     private final WebConfig config;
+    private final String GATEWAY_PREFIX="/api/v1/data";
     private RequestResources extractResources(HttpServletRequest request, String body,String baseURL) {
 
 
         String rawURI = request.getRequestURI();
         String uri = StringUtils.hasText(rawURI)?rawURI:"";
+        if(uri.startsWith(GATEWAY_PREFIX))
+            uri=uri.replace(GATEWAY_PREFIX,"");
+
         Mono<String> bodyMono = StringUtils.hasText(body)?Mono.just(body):Mono.never();
 
         String queryString = request.getQueryString();
