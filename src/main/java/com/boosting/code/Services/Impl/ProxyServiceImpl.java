@@ -46,8 +46,7 @@ public class ProxyServiceImpl implements IProxyService {
         MultiValueMap<String, String> queryParams = extractQueryParams(queryString);
 
         RequestResources resources = new RequestResources(uri,bodyMono,queryParams,baseURL);
-
-
+        resources.setBinary(queryParams.isEmpty());
         return resources;
     }
 
