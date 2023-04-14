@@ -176,4 +176,9 @@ public class ProxyServiceImpl implements IProxyService {
         return responseDto;
     }
 
+    public ProxyResponseDto processRequestGivenResources(RequestResources resources,String baseURL,String httpMethod){
+        ProxyResponseDto responseDto = resolveResponse(resources, httpMethod);
+        return responseDto;
+    }
+
 }
