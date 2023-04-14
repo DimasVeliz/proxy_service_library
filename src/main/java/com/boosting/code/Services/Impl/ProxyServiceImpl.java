@@ -1,6 +1,7 @@
 package com.boosting.code.Services.Impl;
 
 import com.boosting.code.Config.WebConfig;
+import com.boosting.code.Dto.ProtoRequest;
 import com.boosting.code.Dto.ProxyResponseDto;
 import com.boosting.code.Exceptions.ProxyServiceException;
 import com.boosting.code.Models.FileInfo;
@@ -31,23 +32,39 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ProxyServiceImpl implements IProxyService {
     private final WebConfig config;
     private final String GATEWAY_PREFIX="/api/v1/data";
-    private RequestResources extractResources(HttpServletRequest request, String body,String baseURL) {
-
-
-        String rawURI = request.getRequestURI();
+    private RequestResources extractResources(ProtoRequest request) {
+        String rawURI = request.getUri();
         String uri = StringUtils.hasText(rawURI)?rawURI:"";
         if(uri.startsWith(GATEWAY_PREFIX))
             uri=uri.replace(GATEWAY_PREFIX,"");
 
-        Mono<String> bodyMono = StringUtils.hasText(body)?Mono.just(body):Mono.never();
+        Mono<String> bodyMono = StringUtils.hasText(request.getBody())?
+                Mono.just(request.getBody()):Mono.never();
 
         String queryString = request.getQueryString();
 
         MultiValueMap<String, String> queryParams = extractQueryParams(queryString);
+        RequestResources resources = new RequestResources(uri,bodyMono,queryParams,request.getBaseURL());
+        resources.setBinary(request.isBinaryClient());
 
-        RequestResources resources = new RequestResources(uri,bodyMono,queryParams,baseURL);
-        resources.setBinary(!queryParams.isEmpty());
         return resources;
+    }
+
+    private RequestResources extractResources(HttpServletRequest request,
+                                              String body,
+                                              String baseURL,
+                                              boolean isBinaryClient) {
+
+        ProtoRequest protoRequest = ProtoRequest
+                .builder()
+                .queryString(request.getQueryString())
+                .uri(request.getRequestURI())
+                .body(body)
+                .baseURL(baseURL)
+                .isBinaryClient(isBinaryClient)
+                .build();
+
+        return extractResources(protoRequest);
     }
 
     private MultiValueMap<String, String> extractQueryParams(String queryString) {
@@ -151,33 +168,35 @@ public class ProxyServiceImpl implements IProxyService {
         return isBinaryClient ? config.getBinaryClient(base) : config.getJSONClient(base);
     }
 
-    public ProxyResponseDto processGetRequest(HttpServletRequest request, String trackingID, String baseURL) {
-        RequestResources extractedResources = extractResources(request, null,baseURL);
+    public ProxyResponseDto processGetRequest(HttpServletRequest request, String trackingID, String baseURL,boolean isBinaryClient) {
+        RequestResources extractedResources = extractResources(request, null,baseURL, isBinaryClient);
 
         ProxyResponseDto responseDto = resolveResponse(extractedResources, "GET");
         return responseDto;
     }
 
-    public ProxyResponseDto processPostRequest(HttpServletRequest request, String body, String trackingID, String baseURL) {
-        RequestResources extractedResources = extractResources(request, body,baseURL);
+    public ProxyResponseDto processPostRequest(HttpServletRequest request, String body, String trackingID, String baseURL,boolean isBinaryClient) {
+        RequestResources extractedResources = extractResources(request, body,baseURL, isBinaryClient);
         ProxyResponseDto responseDto = resolveResponse(extractedResources, "POST");
         return responseDto;
     }
 
-    public ProxyResponseDto processPutRequest(HttpServletRequest request, String body, String trackingID, String baseURL) {
-        RequestResources extractedResources = extractResources(request, body,baseURL);
+    public ProxyResponseDto processPutRequest(HttpServletRequest request, String body, String trackingID, String baseURL,boolean isBinaryClient) {
+        RequestResources extractedResources = extractResources(request, body,baseURL, isBinaryClient);
         ProxyResponseDto responseDto = resolveResponse(extractedResources, "PUT");
         return responseDto;
     }
 
-    public ProxyResponseDto processDeleteRequest(HttpServletRequest request, String trackingID, String baseURL) {
-        RequestResources extractedResources = extractResources(request, null,baseURL);
+    public ProxyResponseDto processDeleteRequest(HttpServletRequest request, String trackingID, String baseURL,boolean isBinaryClient) {
+        RequestResources extractedResources = extractResources(request, null,baseURL, isBinaryClient);
         ProxyResponseDto responseDto = resolveResponse(extractedResources, "DELETE");
         return responseDto;
     }
 
-    public ProxyResponseDto processRequestGivenResources(RequestResources resources,String baseURL,String httpMethod){
-        ProxyResponseDto responseDto = resolveResponse(resources, httpMethod);
+    public ProxyResponseDto processRequestGivenResources(ProtoRequest request, String httpMethod){
+        RequestResources extractedResources = extractResources(request);
+
+        ProxyResponseDto responseDto = resolveResponse(extractedResources, httpMethod);
         return responseDto;
     }
 
