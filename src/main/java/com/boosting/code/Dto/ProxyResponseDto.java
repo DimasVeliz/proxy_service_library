@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpHeaders;
 
 @Data
 @AllArgsConstructor
@@ -13,4 +14,5 @@ public class ProxyResponseDto {
     private JsonNode jsonData;
     private FileInfo fileInfo;
     private boolean isBinary;
+    private HttpHeaders headers;
 }

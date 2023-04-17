@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b981bd5-c047-41b2-adb0-0d5088dff99f" name="Changes" comment="proxy-service now suports execution of httpcalls given the info provided manually though ProtoRequest and not extracted form httpRequest directly">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Dto/ProtoRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/boosting/code/Services/IProxyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Services/IProxyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/boosting/code/Services/Impl/ProxyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Services/Impl/ProxyServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -150,7 +149,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681489248909</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="proxy-service now suports execution of httpcalls given the info provided manually though ProtoRequest and not extracted form httpRequest directly">
+      <created>1681489256593</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1681489256593</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -133,21 +134,19 @@ public class ProxyServiceImpl implements IProxyService {
     }
 
     private ProxyResponseDto decodeResponse(WebClient.RequestHeadersSpec<?> base, RequestResources resources) {
+        AtomicReference<HttpHeaders> headers = new AtomicReference<>();
         if (resources.isBinary()) {
             byte[] data;
-            AtomicReference<HttpHeaders> headers = new AtomicReference<>();
             Mono<byte[]> mono = base.exchangeToMono(responseData -> {
                 headers.set(responseData.headers().asHttpHeaders());
                 return responseData.bodyToMono(byte[].class);
             });
             data = mono.block();
-            String mime = extractMimeType(headers);
-            String uuid= extractUuid(headers);
-            return new ProxyResponseDto(null, new FileInfo(uuid, mime,data), true);
+            return new ProxyResponseDto(null, new FileInfo(null, null,data), true,headers.get());
         }
         WebClient.ResponseSpec responseSpec = base.retrieve();
         JsonNode body = responseSpec.bodyToMono(JsonNode.class).block();
-        return new ProxyResponseDto(body, null, false);
+        return new ProxyResponseDto(body, null, false,headers.get());
     }
 
     private String extractUuid(AtomicReference<HttpHeaders> headers) {
@@ -158,9 +157,17 @@ public class ProxyServiceImpl implements IProxyService {
     }
 
     private String extractMimeType(AtomicReference<HttpHeaders> headers) {
+        String value=null;
+        if(headers.get().containsKey("Content-Type"))
+            value= headers.get().getFirst("Content-Type");
+        if (null == value)
+            value= MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        return value;
+    }
+    private String extractContentDisposition(AtomicReference<HttpHeaders> headers){
         String value = headers.get().getFirst("Content-Disposition");
         if (null == value)
-            throw new ProxyServiceException("Content-Disposition header not present");
+            value= "filename=\"file\"";
         return value;
     }
 
