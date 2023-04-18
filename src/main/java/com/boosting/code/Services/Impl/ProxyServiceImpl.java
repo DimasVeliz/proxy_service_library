@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.boosting.code.Utilities.Utils.extractHeaders;
+
 
 @Service
 @AllArgsConstructor
@@ -45,7 +47,15 @@ public class ProxyServiceImpl implements IProxyService {
         String queryString = request.getQueryString();
 
         MultiValueMap<String, String> queryParams = extractQueryParams(queryString);
-        RequestResources resources = new RequestResources(uri,bodyMono,queryParams,request.getBaseURL());
+        RequestResources resources =  RequestResources
+                .builder()
+                .uri(uri)
+                .body(bodyMono)
+                .paramInfo(queryParams)
+                .base(request.getBaseURL())
+                .headers(request.getHeaders())
+                .isBinary(request.isBinaryClient())
+                .build();
         resources.setBinary(request.isBinaryClient());
 
         return resources;
@@ -56,6 +66,8 @@ public class ProxyServiceImpl implements IProxyService {
                                               String baseURL,
                                               boolean isBinaryClient) {
 
+        var headers = extractHeaders(request);
+
         ProtoRequest protoRequest = ProtoRequest
                 .builder()
                 .queryString(request.getQueryString())
@@ -63,6 +75,7 @@ public class ProxyServiceImpl implements IProxyService {
                 .body(body)
                 .baseURL(baseURL)
                 .isBinaryClient(isBinaryClient)
+                .headers(headers)
                 .build();
 
         return extractResources(protoRequest);
@@ -110,22 +123,26 @@ public class ProxyServiceImpl implements IProxyService {
             case "GET":
                 base = client.get()
                         .uri(resources.getUri(),
-                                uriBuilder -> uriBuilder.queryParams(resources.getParamInfo()).build());
+                                uriBuilder -> uriBuilder.queryParams(resources.getParamInfo()).build())
+                        .headers(httpHeaders -> httpHeaders.addAll(resources.getHeaders()));
                 break;
             case "POST":
                 base = client.post()
                         .uri(resources.getUri(), uriBuilder -> uriBuilder.queryParams(resources.getParamInfo()).build())
-                        .body(resources.getBody(), String.class);
+                        .body(resources.getBody(), String.class)
+                        .headers(httpHeaders -> httpHeaders.addAll(resources.getHeaders()));
                 break;
             case "PUT":
                 base = client.put()
                         .uri(resources.getUri(), uriBuilder -> uriBuilder.queryParams(resources.getParamInfo()).build())
-                        .body(resources.getBody(), String.class);
+                        .body(resources.getBody(), String.class)
+                        .headers(httpHeaders -> httpHeaders.addAll(resources.getHeaders()));
                 break;
             case "DELETE":
                 base = client.delete()
                         .uri(resources.getUri(),
-                                uriBuilder -> uriBuilder.queryParams(resources.getParamInfo()).build());
+                                uriBuilder -> uriBuilder.queryParams(resources.getParamInfo()).build())
+                        .headers(httpHeaders -> httpHeaders.addAll(resources.getHeaders()));
                 break;
             default:
                 base = null;

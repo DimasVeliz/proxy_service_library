@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpHeaders;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +16,5 @@ public class ProtoRequest {
     private String body;
     private String baseURL;
     private boolean isBinaryClient;
+    private HttpHeaders headers;
 }
