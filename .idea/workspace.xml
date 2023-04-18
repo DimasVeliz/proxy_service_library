@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b981bd5-c047-41b2-adb0-0d5088dff99f" name="Changes" comment="http headers included on ProxyResponseDto">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Utilities/Utils.java" afterDir="false" />
+    <list default="true" id="0b981bd5-c047-41b2-adb0-0d5088dff99f" name="Changes" comment="Builder patern used in RequestResources as well as other lombok annotations, headers are now part of the resources">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/boosting/code/Dto/ProtoRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Dto/ProtoRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/boosting/code/Models/RequestResources.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Models/RequestResources.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/boosting/code/Constants/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Constants/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/boosting/code/Services/Impl/ProxyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Services/Impl/ProxyServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/boosting/code/Utilities/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/boosting/code/Utilities/Utils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +165,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681734072146</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Builder patern used in RequestResources as well as other lombok annotations, headers are now part of the resources">
+      <created>1681844128178</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1681844128178</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -189,6 +195,7 @@
     <MESSAGE value="proxy-service now suports execution of httpcalls given the info provided manually and not extracted form httpRequest" />
     <MESSAGE value="proxy-service now suports execution of httpcalls given the info provided manually though ProtoRequest and not extracted form httpRequest directly" />
     <MESSAGE value="http headers included on ProxyResponseDto" />
-    <option name="LAST_COMMIT_MESSAGE" value="http headers included on ProxyResponseDto" />
+    <MESSAGE value="Builder patern used in RequestResources as well as other lombok annotations, headers are now part of the resources" />
+    <option name="LAST_COMMIT_MESSAGE" value="Builder patern used in RequestResources as well as other lombok annotations, headers are now part of the resources" />
   </component>
 </project>

@@ -3,7 +3,6 @@ package com.boosting.code.Services.Impl;
 import com.boosting.code.Config.WebConfig;
 import com.boosting.code.Dto.ProtoRequest;
 import com.boosting.code.Dto.ProxyResponseDto;
-import com.boosting.code.Exceptions.ProxyServiceException;
 import com.boosting.code.Models.FileInfo;
 import com.boosting.code.Models.RequestResources;
 import com.boosting.code.Services.IProxyService;
@@ -13,101 +12,20 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.boosting.code.Utilities.Utils.extractHeaders;
+import static com.boosting.code.Utilities.Utils.extractResources;
 
 
 @Service
 @AllArgsConstructor
 public class ProxyServiceImpl implements IProxyService {
     private final WebConfig config;
-    private final String GATEWAY_PREFIX="/api/v1/data";
-    private RequestResources extractResources(ProtoRequest request) {
-        String rawURI = request.getUri();
-        String uri = StringUtils.hasText(rawURI)?rawURI:"";
-        if(uri.startsWith(GATEWAY_PREFIX))
-            uri=uri.replace(GATEWAY_PREFIX,"");
 
-        Mono<String> bodyMono = StringUtils.hasText(request.getBody())?
-                Mono.just(request.getBody()):Mono.never();
 
-        String queryString = request.getQueryString();
-
-        MultiValueMap<String, String> queryParams = extractQueryParams(queryString);
-        RequestResources resources =  RequestResources
-                .builder()
-                .uri(uri)
-                .body(bodyMono)
-                .paramInfo(queryParams)
-                .base(request.getBaseURL())
-                .headers(request.getHeaders())
-                .isBinary(request.isBinaryClient())
-                .build();
-        resources.setBinary(request.isBinaryClient());
-
-        return resources;
-    }
-
-    private RequestResources extractResources(HttpServletRequest request,
-                                              String body,
-                                              String baseURL,
-                                              boolean isBinaryClient) {
-
-        var headers = extractHeaders(request);
-
-        ProtoRequest protoRequest = ProtoRequest
-                .builder()
-                .queryString(request.getQueryString())
-                .uri(request.getRequestURI())
-                .body(body)
-                .baseURL(baseURL)
-                .isBinaryClient(isBinaryClient)
-                .headers(headers)
-                .build();
-
-        return extractResources(protoRequest);
-    }
-
-    private MultiValueMap<String, String> extractQueryParams(String queryString) {
-        Map<String, List<String>> queryParams = new HashMap<>();
-        if (queryString != null) {
-            String[] queryParamsArray = queryString.split("&");
-            for (String queryParam : queryParamsArray) {
-                String[] keyValue = queryParam.split("=");
-                if (keyValue.length == 2) {
-                    String key = null;
-                    String value = null;
-                    try {
-                        key = URLDecoder.decode(keyValue[0], "UTF-8");
-                        value = URLDecoder.decode(keyValue[1], "UTF-8");
-
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
-                    }
-                    List<String> array = new ArrayList<>();
-                    array.add(value);
-                    queryParams.put(key, array);
-                }
-            }
-        }
-
-        LinkedMultiValueMap<String,String> response = new LinkedMultiValueMap<>(queryParams);
-
-        return response;
-    }
 
     private ProxyResponseDto resolveResponse(RequestResources extractedResources, String method) {
         WebClient client = clientSelector(extractedResources.isBinary(),extractedResources.getBase());
